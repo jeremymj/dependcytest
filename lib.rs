@@ -7,7 +7,7 @@ mod dependcydemo {
     use ink_core::storage;
     use ink_prelude::{format, vec::Vec, string::String};
 
-    use schnorrkel::PublicKey;
+    use schnorrkel::{PublicKey,Signature,signing_context};
     use scale::{Decode, Encode};
 
 
@@ -32,14 +32,14 @@ mod dependcydemo {
         fn authorization(&mut self,signature:[u8;64],new_manager:AccountId)->Result<(),String>{
             //just for test 
             let caller = self.env().caller();
+            let context = signing_context(b"this signature does this thing");
+            let signature = Signature::from_bytes(&signature).unwrap();
             match PublicKey::from_bytes(&caller.encode()) {
                 Ok(pk) => {
-                    if pk.verify_simple_preaudit_deprecated(
-                        SIGNING_CTX, &new_manager.encode(), &signature[..],
-                    ).is_ok(){
+                    if pk.verify(context.bytes(&new_manager.encode()), &signature).is_ok(){
                         self.manager.set(new_manager);
                         Ok(())
-                    }else {
+                    }else{
                         Err(String::from("Signature content does not match verification content!"))
                     }
                 },

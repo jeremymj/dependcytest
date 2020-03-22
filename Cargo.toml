@@ -12,7 +12,8 @@ ink_lang = { version = "2.0.0", git = "https://github.com/paritytech/ink", tag =
 ink_prelude = {version = "2.0.0", git = "https://github.com/paritytech/ink",tag = "v2.0.0", default-features = false }
 
 scale = { package = "parity-scale-codec", version = "1.2", default-features = false, features = ["derive"] }
-schnorrkel = { version = "0.9.1",features = ["preaudit_deprecated", "u64_backend"], default-features = false}
+schnorrkel = { version = "0.9.1",features = ["u64_backend"], default-features = false}
+
 
 [dependencies.type-metadata]
 git = "https://github.com/type-metadata/type-metadata.git"

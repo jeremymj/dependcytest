@@ -2,11 +2,11 @@
  
 this repository just for reproduce the error  that  `module imports a non-existent function` message when uploading wasm file to node.
 
-using  ink version: `tag = "v2.0.0"`, node of substrate version is:  `version 2.0.0-alpha.4-0b3020796-x86_64-linux-gnu`
+using  ink version: `tag = "v2.0.0"`, `cargo--contract` version is `0.5.0` and node of substrate version is:  `version 2.0.0-alpha.4-0b3020796-x86_64-linux-gnu`
 
 Proceed as follows:
 
-1、 add `schnorrkel` dependency in `cargo.toml`,for example:`schnorrkel = { version = "0.9.1",features = ["preaudit_deprecated", "u64_backend"], default-features = false}`;
+1、 add `schnorrkel` dependency in `cargo.toml`,for example:`schnorrkel = { version = "0.9.1",features = ["u64_backend"], default-features = false}`;
 
 2、using `cargo contract build`  command generate wasm file and `cargo contract generate-matedata` generate metadata.json
 
