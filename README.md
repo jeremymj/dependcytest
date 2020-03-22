@@ -1,7 +1,5 @@
 # dependcytest
-
- when add `schnorrkel` dependency in `cargo.toml` and uploading  wasm file to the node appare  
-
+ 
 this repository just for reproduce the error  that  `module imports a non-existent function` message when uploading wasm file to node.
 
 using  ink version: `tag = "v2.0.0"`, node of substrate version is:  `version 2.0.0-alpha.4-0b3020796-x86_64-linux-gnu`
