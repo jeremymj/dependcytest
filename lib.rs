@@ -1,14 +1,15 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use ink_lang as ink;
+use schnorrkel::{PublicKey,Signature,signing_context};
 
 #[ink::contract]
 mod dependcydemo {
   
-    use ink_prelude::{format, vec::Vec, string::String};
-    use ink_storage::lazy::Lazy;
-    use schnorrkel::{PublicKey,Signature,signing_context};
-    use scale::{Decode, Encode};
+    use super::*;
+    use ink_prelude::{string::String};
+ 
+    use scale::Encode;
 
     const SIGNING_CTX: &[u8] = b"substrate";
     /// Defines the storage of your contract.
@@ -17,7 +18,7 @@ mod dependcydemo {
     #[ink(storage)]
     pub struct Dependcydemo {
         /// Stores a single `bool` value on the storage.
-        manager:Lazy<AccountId>,
+        manager:AccountId,
     }
 
     impl Dependcydemo {
@@ -25,7 +26,7 @@ mod dependcydemo {
         #[ink(constructor)]
        pub fn new(init_account_id: AccountId)->Self {
             Self{
-                manager:Lazy::new(init_account_id)
+                manager:init_account_id
             }
         }
 
@@ -38,7 +39,7 @@ mod dependcydemo {
             match PublicKey::from_bytes(&caller.encode()) {
                 Ok(pk) => {
                     if pk.verify(context.bytes(&new_manager.encode()), &signature).is_ok(){
-                        self.manager.set(new_manager);
+                        self.manager = new_manager;
                         Ok(())
                     }else{
                         Err(String::from("Signature content does not match verification content!"))
