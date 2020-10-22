@@ -10,7 +10,6 @@ mod dependcydemo {
     use schnorrkel::{PublicKey,Signature,signing_context};
     use scale::{Decode, Encode};
 
-
     const SIGNING_CTX: &[u8] = b"substrate";
     /// Defines the storage of your contract.
     /// Add new fields to the below struct in order
@@ -18,7 +17,7 @@ mod dependcydemo {
     #[ink(storage)]
     pub struct Dependcydemo {
         /// Stores a single `bool` value on the storage.
-        manager:AccountId,
+        manager:Lazy<AccountId>,
     }
 
     impl Dependcydemo {
@@ -31,7 +30,7 @@ mod dependcydemo {
         }
 
         #[ink(message)]
-        fn authorization(&mut self,signature:[u8;64],new_manager:AccountId)->Result<(),String>{
+        pub fn authorization(&mut self,signature:[u8;64],new_manager:AccountId)->Result<(),String>{
             //just for test 
             let caller = self.env().caller();
             let context = signing_context(b"this signature does this thing");
