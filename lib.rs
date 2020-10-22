@@ -2,11 +2,11 @@
 
 use ink_lang as ink;
 
-#[ink::contract(version = "0.1.0")]
+#[ink::contract]
 mod dependcydemo {
-    use ink_core::storage;
+  
     use ink_prelude::{format, vec::Vec, string::String};
-
+    use ink_storage::lazy::Lazy;
     use schnorrkel::{PublicKey,Signature,signing_context};
     use scale::{Decode, Encode};
 
@@ -16,18 +16,20 @@ mod dependcydemo {
     /// Add new fields to the below struct in order
     /// to add new static storage fields to your contract.
     #[ink(storage)]
-    struct Dependcydemo {
+    pub struct Dependcydemo {
         /// Stores a single `bool` value on the storage.
-        manager: storage::Value<AccountId>,
+        manager:AccountId,
     }
 
     impl Dependcydemo {
         
         #[ink(constructor)]
-        fn new(&mut self, init_account_id: AccountId) {
-            self.manager.set(init_account_id);
+       pub fn new(init_account_id: AccountId)->Self {
+            Self{
+                manager:Lazy::new(init_account_id)
+            }
         }
-      
+
         #[ink(message)]
         fn authorization(&mut self,signature:[u8;64],new_manager:AccountId)->Result<(),String>{
             //just for test 
@@ -45,41 +47,6 @@ mod dependcydemo {
                 },
              Err(_err) => Err(String::from("PublicKey convert")),
             } 
-        }
-
-        
-      /*   #[ink(message)]
-        fn get(&self) -> bool {
-            *self.value
-        } */
-    }
-
-    /// Unit tests in Rust are normally defined within such a `#[cfg(test)]`
-    /// module and test functions are marked with a `#[test]` attribute.
-    /// The below code is technically just normal Rust code.
-    #[cfg(test)]
-    mod tests {
-        /// Imports all the definitions from the outer scope so we can use them here.
-        use super::*;
-
-        /// We test if the default constructor does its job.
-        #[test]
-        fn default_works() {
-            // Note that even though we defined our `#[ink(constructor)]`
-            // above as `&mut self` functions that return nothing we can call
-            // them in test code as if they were normal Rust constructors
-            // that take no `self` argument but return `Self`.
-            let dependcydemo = Dependcydemo::default();
-            assert_eq!(dependcydemo.get(), false);
-        }
-
-        /// We test a simple use case of our contract.
-        #[test]
-        fn it_works() {
-            let mut dependcydemo = Dependcydemo::new(false);
-            assert_eq!(dependcydemo.get(), false);
-            dependcydemo.flip();
-            assert_eq!(dependcydemo.get(), true);
         }
     }
 }
